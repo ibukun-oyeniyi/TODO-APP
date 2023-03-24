@@ -30,4 +30,20 @@ const registerUser = async (req,res,next)=>{
     }
 }
 
-module.exports = { registerUser }
+const loginUser = async (req,res,next)=>{
+    try{
+        const {email,password} = req.body
+        const userExists = await db.user.findOne({ where: {email: email}})
+        if (!userExists) {
+            return next(createError(404, "User not found!!!"))
+        }
+        // const verifiedUser = 
+        if (userExists){
+            return res.status(200).send("User has been verified")
+        }
+    }catch(err){
+        next(err)
+    }
+}
+
+module.exports = { registerUser,loginUser }
