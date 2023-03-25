@@ -8,39 +8,24 @@ const userService = require("../services/userService")
 const authService = require("../services/authService")
 
 const registerUser =  (userData,done)=>{
-    userService.findUser(userData.email,(err,userFound)=>{
-      if(err){
-        console.log(err,"here 1")
-        done(err)
-      }else{
-        if (userFound !== "User not Found"){
-          console.log(userFound)
-          done(userFound)
-        }else{
-            userService.registerUser(userData,done)
-        }
-      }
-    })
+        userService.registerUser(userData,done)
 }
 
 
-const loginUser = async (req,res,next)=>{
-    try{
-        userService.findUser(userData.email,(err,userFound)=>{
-            if(err){
-              done(err)
-            }else{
-              if (userFound){
-                done(userFound)
-              }else{
-                userService.registerUser(userData,done)
-              }
-            }
-          })
-        
-    }catch(err){
-        next(err)
-    }
+const loginUser =  ({email,password},done)=>{
+    userService.findUser(email,(err,userFound)=>{
+        if(err){
+          done(err)
+        }else{
+          const userVerified = authService.verifyUser({email, password},userFound)
+          if (userVerified){
+            const jwtToken = authService.createJWT(userFound)
+            done(undefined,jwtToken)
+          }else{
+            done({error: "User not verified"})
+          }
+        }
+      })
 }
 
 

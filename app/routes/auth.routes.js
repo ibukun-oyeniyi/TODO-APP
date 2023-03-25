@@ -25,7 +25,24 @@ router.post('/register',(req,res)=>{
     }
 })
 
-router.post("/login",authController.loginUser)
+router.post("/login",(req,res)=>{
+    try{
+        //retrive email and password from req.body
+        const {email, password} = req.body
+        if(!(email && password)){
+                return res.status(400).send('Required inputs are missing')
+        } 
+        //calling the authController login usermethod return the error or the result 
+        authController.loginUser({email,password},(err,result)=>{
+            if (err){
+                    return res.status(401).send({error: 'Invalid Credentials'})
+            }else{
+                    return res.status(200).send({STATUS:"OK",data:result})
+            }
+        })}catch(err){
+                res.status(500).send({error:'Unexpected error while registering the user'})
+        }
+})
 
 
 module.exports = router

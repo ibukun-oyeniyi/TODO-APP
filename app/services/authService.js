@@ -3,22 +3,22 @@
 //import jsonwebtoken and config file
 const jwt = require("jsonwebtoken")
 const config = require("../config/dbConfig")
+const bcrypt = require("bcryptjs")
 
 //This function will verify email and password and will return true and false
 
 
 
 function verifyUser({email,password},userData){
- 
    if(userData===undefined){
       return false
    }
    else {
-     if(email === userData.email && password === userData.password)
-     return true;
-     else{
-      return false;
-     }
+      const isPasswordCorrect = bcrypt.compareSync(password, userData.password)
+      if (!isPasswordCorrect) return false
+      else{
+        return true;
+      } 
    }
     
   
@@ -31,10 +31,9 @@ function createJWT(userdata) {
   const payload = {
     role: "USER",
     email: userdata.email,
-    name: userdata.name
+    username: userdata.username
   }
-  console.log(userdata)
-   const token = jwt.sign(payload, config.AUTH_SECRET,{
+   const token = jwt.sign(payload, process.env.AUTH_SECRET || "secret",{
     expiresIn: 3600
    })
    
