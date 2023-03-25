@@ -2,8 +2,11 @@
 
 //import jsonwebtoken and config file
 const jwt = require("jsonwebtoken")
-const config = require("../../config")
+const config = require("../config/dbConfig")
+
 //This function will verify email and password and will return true and false
+
+
 
 function verifyUser({email,password},userData){
  

@@ -4,46 +4,45 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/users.model")
 const db = require("../config/dbConfig")
 const { createError } = require("../utils/error")
+const userService = require("../services/userService")
+const authService = require("../services/authService")
 
-const registerUser = async (req,res,next)=>{
-    try{
-        const salt = bcrypt.genSaltSync(10)
-        const hashedPassword = bcrypt.hashSync(req.body.password, salt)
-        const info = {
-            username: req.body.username,
-            email: req.body.email,
-            password: hashedPassword,
+const registerUser =  (userData,done)=>{
+    userService.findUser(userData.email,(err,userFound)=>{
+      if(err){
+        console.log(err,"here 1")
+        done(err)
+      }else{
+        if (userFound !== "User not Found"){
+          console.log(userFound)
+          done(userFound)
+        }else{
+            userService.registerUser(userData,done)
         }
-        const userExists = await db.user.findOne({ where: {email: req.body.email}})
-        if (userExists){
-            return next(createError(404,"This User is already registered"))
-        }
-        const newUser = new db.user(info)
-        await newUser.save()
-            .then(() => {
-                res.status(200).json("User has been Registered")
-            }).catch (err => {
-                res.status(500).json(err)
-            })
-    }catch(err){
-        next(err)
-    }
+      }
+    })
 }
+
 
 const loginUser = async (req,res,next)=>{
     try{
-        const {email,password} = req.body
-        const userExists = await db.user.findOne({ where: {email: email}})
-        if (!userExists) {
-            return next(createError(404, "User not found!!!"))
-        }
-        // const verifiedUser = 
-        if (userExists){
-            return res.status(200).send("User has been verified")
-        }
+        userService.findUser(userData.email,(err,userFound)=>{
+            if(err){
+              done(err)
+            }else{
+              if (userFound){
+                done(userFound)
+              }else{
+                userService.registerUser(userData,done)
+              }
+            }
+          })
+        
     }catch(err){
         next(err)
     }
 }
+
+
 
 module.exports = { registerUser,loginUser }
