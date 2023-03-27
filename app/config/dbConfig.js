@@ -1,8 +1,4 @@
 const Sequelize = require("sequelize")
-const User = require("../models/users.model.js")
-const Tutorial = require("../models/tutorial.model.js")
-
-
 const configDetails = {
     HOST: "localhost",
     USER: "root",
@@ -38,7 +34,14 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.user = User(sequelize, Sequelize);
-db.tutorial = Tutorial(sequelize, Sequelize);
+const User = require("../models/users.model.js")(sequelize, Sequelize)
+const Tutorial = require("../models/tutorial.model.js")(sequelize, Sequelize)
+const Todo = require("../models/todo.model")(sequelize, Sequelize)
+
+Todo.belongsTo(User)
+
+db.user = User
+db.tutorial = Tutorial
+db.todo = Todo
 
 module.exports = db
