@@ -30,6 +30,7 @@ function createJWT(userdata) {
   //create payload
   const payload = {
     role: "USER",
+    id: userdata.id,
     email: userdata.email,
     username: userdata.username
   }
