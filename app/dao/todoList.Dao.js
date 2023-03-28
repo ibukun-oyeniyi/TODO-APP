@@ -89,5 +89,5 @@ const updateTodoList = (todoListData, done) => {
    
 
 module.exports = {
-    findTodoList,createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList
+    createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList
 }
