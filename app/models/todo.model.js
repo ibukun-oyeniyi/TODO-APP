@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Todo = sequelize.define("todo", {
-      task_name: {
+        todolist_name: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: false
@@ -8,16 +8,17 @@ module.exports = (sequelize, Sequelize) => {
       description: {
           type: Sequelize.TEXT,
           allowNull: false,
-          unique: true
+          unique: false,
+          defaultValue: ""
       },
       completed: {
           type: Sequelize.BOOLEAN,
           allowNull: false,
-          default: false
+          defaultValue: false
       },
     });
-    Todo.associate = function(models) {
-        Todo.belongsTo(models.user, { foreignKey: 'user_id' });
+    Todo.associate = function(user) {
+        Todo.belongsTo(user, { foreignKey: 'userId' });
       };
   
     return Todo;
