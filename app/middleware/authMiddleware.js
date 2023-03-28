@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const { createError } = require("./error")
+const { createError } = require("../utils/error")
 
 //Verifying the token generated in the login Page
 const verifyToken = async (req, res, next) => {
@@ -23,11 +23,17 @@ const verifyToken = async (req, res, next) => {
 //Verifying the User after verifying the token
 const verifyUser = async (req, res, next) => {
     verifyToken(req, res, () => {
-        if (req.user.id === parseInt(req.params.userId)) {
-            next();
-        } else {
-            res.status(401).json("You are not Authorized to do this")
+        console.log(req)
+        try{
+            if (req.user.id === parseInt(req.params.userId)) {
+                next();
+            } else {
+                res.status(401).json("You are not Authorized to do this")
+            }
+        }catch(err){
+            res.status(400).json("user obj not found")
         }
+        
     })
 }
 
