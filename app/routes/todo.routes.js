@@ -41,13 +41,14 @@ router.get('/:userId/todo/:todolistId', verifyUser, (req, res) => {
 
 router.post('/:userId/todo',verifyUser,(req,res)=>{
     try{
-        const {todolist_name} = req.body
+        const {todolist_name,description} = req.body
         const userId = parseInt(req.params.userId)
         if(!(todolist_name)){
             return res.status(400).send('Required inputs are missing')
         }
         console.log(userId)
         const todoDetails = {
+            description: description || "",
             todolist_name,
             userId
         }
@@ -65,7 +66,7 @@ router.post('/:userId/todo',verifyUser,(req,res)=>{
 
 router.put('/:userId/todo/:todolistId', verifyUser, (req, res) => {
     try {
-      const { todolist_name } = req.body;
+      const { todolist_name} = req.body;
       const userId = parseInt(req.params.userId);
       const todolistId = parseInt(req.params.todolistId);
   
