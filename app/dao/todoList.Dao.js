@@ -17,6 +17,7 @@ const findTodoList =  (id,done)=>{
 const getTodoLists = (userId, limit, done) => {
     db.todo.findAll({
       where: { userId: userId },
+      include: {model: db.task},
       limit: limit
     }).then(todoLists => {
       done(undefined, todoLists);
@@ -59,7 +60,8 @@ const updateTodoList = (todoListData, done) => {
   
   const getTodoListById = (userId, todolistId, done) => {
     db.todo.findOne({
-      where: { id: todolistId, userId: userId }
+      where: { id: todolistId, userId: userId },
+      include: {model: db.task}
     }).then(todolist => {
       if (!todolist) {
         done('Todolist not found or unauthorized');
@@ -87,7 +89,21 @@ const updateTodoList = (todoListData, done) => {
     });
   };
    
-
+  const deleteTodoLists = (userId, todolistIds, done) => {
+    db.todo.destroy({
+      where: {
+        id: todolistIds,
+        userId: userId,
+      },
+    })
+      .then((result) => {
+        done(undefined, result);
+      })
+      .catch((err) => {
+        console.log(err);
+        done('Error deleting todolists');
+      });
+  };
 module.exports = {
-    createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList
+    createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList,deleteTodoLists
 }
