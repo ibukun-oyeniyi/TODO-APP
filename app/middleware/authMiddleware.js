@@ -23,7 +23,6 @@ const verifyToken = async (req, res, next) => {
 //Verifying the User after verifying the token
 const verifyUser = async (req, res, next) => {
     verifyToken(req, res, () => {
-        console.log(req)
         try{
             if (req.user.id === parseInt(req.params.userId)) {
                 next();
