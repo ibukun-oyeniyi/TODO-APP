@@ -18,8 +18,12 @@ const getTodoListById = (userId,todolistId,done)=>{
     todoService.getTodoListById(userId,todolistId,done)
 }
 
+const deleteTodoLists = (todoData,done)=>{
+    todoService.deleteTodoLists(todoData,done)
+}
+
 const deleteTodoList = (userId,todolistId,done)=>{
     todoService.deleteTodoList(userId,todolistId,done)
 }
 
-module.exports = { createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList}
+module.exports = { createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList,deleteTodoLists}

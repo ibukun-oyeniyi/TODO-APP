@@ -23,6 +23,10 @@ const createTodoList= (todoListData,done)=>{
     todoListDao.createTodoList(todoListData,done)
 }
 
+const deleteTodoLists=(todoListDatas,done)=>{
+    todoListDao.deleteTodoLists(todoListDatas,done)
+}
+
 const updateTodoList = (todoListData,done)=>{
     //call the todoListdao findtodoList method
     todoListDao.updateTodoList(todoListData,done)
@@ -31,5 +35,5 @@ const updateTodoList = (todoListData,done)=>{
 
 
 module.exports={
-    findTodoList,createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList
+    findTodoList,createTodoList,updateTodoList,getTodoListById,getTodoLists,deleteTodoList,deleteTodoLists
 }
