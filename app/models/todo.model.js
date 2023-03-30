@@ -1,25 +1,29 @@
 module.exports = (sequelize, Sequelize) => {
-    const Todo = sequelize.define("todo", {
-        todolist_name: {
-        type: Sequelize.STRING,
+  const Todo = sequelize.define("todo", {
+      todolist_name: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: false
+  },
+    description: {
+        type: Sequelize.TEXT,
         allowNull: false,
-        unique: false
+        unique: false,
+        defaultValue: ""
     },
-      description: {
-          type: Sequelize.TEXT,
-          allowNull: false,
-          unique: false,
-          defaultValue: ""
-      },
-      completed: {
-          type: Sequelize.BOOLEAN,
-          allowNull: false,
-          defaultValue: false
-      },
-    });
-    Todo.associate = function(user) {
-        Todo.belongsTo(user, { foreignKey: 'userId' });
-      };
-  
-    return Todo;
-  };
+    completed: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    },
+  });
+  Todo.associate = function(model) {
+      Todo.belongsTo(model.user, { foreignKey: 'userId' });
+    };
+
+    Todo.associate = function(model) {
+      Todo.hasMany(model.task, { foreignKey: 'todolistId' });
+    };
+
+  return Todo;
+};
