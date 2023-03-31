@@ -37,14 +37,19 @@ db.sequelize = sequelize;
 const User = require("../models/users.model.js")(sequelize, Sequelize)
 const Todo = require("../models/todo.model")(sequelize, Sequelize)
 const Task = require("../models/task.model")(sequelize, Sequelize)
+const Tag = require("../models/tag.model")(sequelize, Sequelize)
+const TodolistTag = require("../models/todolistTag.model")(sequelize, Sequelize)
 
 
 
 db.user = User;
 db.todo = Todo;
-db.task = Task
+db.task = Task;
+db.tag = Tag;
+db.todolistTag = TodolistTag;
 
 User.associate(db);
 Todo.associate(db);
+Tag.associate(db)
 
 module.exports = db

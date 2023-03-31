@@ -25,5 +25,9 @@ module.exports = (sequelize, Sequelize) => {
       Todo.hasMany(model.task, { foreignKey: 'todolistId' });
     };
 
+    Todo.associate = function(model) {
+      Todo.belongsToMany(model.tag, { through: model.todolistTag });
+    };
+
   return Todo;
 };
