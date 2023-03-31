@@ -37,32 +37,31 @@ const createTask = (taskData,done) =>{
   
 }
 
-// const updateTodoList = (todoListData, done) => {
-//     const { todolist_name, userId, todolistId } = todoListData;
-//     db.todo.findOne({
-//       where: { id: todolistId, userId: userId }
-//     }).then(todoList => {
-//       if (!todoList) {
-//         done('Todolist not found or unauthorized');
-//       } else {
-//         return todoList.update({ todolist_name: todolist_name });
-//       }
-//     }).then(updatedTodoList => {
-//       done(undefined, updatedTodoList);
-//     }).catch(err => {
-//       console.log(err);
-//       done('Error updating todolist');
-//     });
-//   };
-  
-  const getTaskById = (userId, todolistId, done) => {
-    db.todo.findOne({
-      where: { id: todolistId, userId: userId }
-    }).then(todolist => {
-      if (!todolist) {
+const updateTask = (taskData, taskId,done) => {
+    db.task.findOne({
+      where: { id: taskId}
+    }).then(todoList => {
+      if (!todoList) {
         done('Todolist not found or unauthorized');
       } else {
-        done(undefined, todolist);
+        return todoList.update(taskData);
+      }
+    }).then(updatedTask => {
+      done(undefined, updatedTask);
+    }).catch(err => {
+      console.log(err);
+      done('Error updating todolist');
+    });
+  };
+  
+  const getTaskById = (taskId,done) => {
+    db.task.findOne({
+      where: { id: taskId}
+    }).then(task => {
+      if (!task) {
+        done('Task not found or unauthorized');
+      } else {
+        done(undefined, task);
       }
     }).catch(err => {
       done('Error getting todolist');
@@ -100,5 +99,5 @@ const createTask = (taskData,done) =>{
   //     });
   // };
 module.exports = {
-    createTask,getTaskById
+    createTask,getTaskById,updateTask
 }

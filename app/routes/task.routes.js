@@ -7,10 +7,8 @@ const router = express.Router()
 
 router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
     try {
-      const userId = parseInt(req.params.userId)
-      const todoId = parseInt(req.params.todoId)
       const taskId = parseInt(req.params.taskId)
-      taskController.getTask(userId,  (err, result) => {
+      taskController.getTaskById(taskId, (err, result) => {
         if (err) {
           return res.status(400).send({ error: 'Error getting tasks' })
         } else {
@@ -42,107 +40,100 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
     }
   })
 
-router.get('/:userId/todo/:todolistId', verifyUser, (req, res) => {
-    try {
-      const userId = parseInt(req.params.userId);
-      const todolistId = parseInt(req.params.todolistId);
+// router.get('/:userId/todo/:todolistId', verifyUser, (req, res) => {
+//     try {
+//       const userId = parseInt(req.params.userId);
+//       const todolistId = parseInt(req.params.todolistId);
       
-      todolistController.getTodoListById(userId, todolistId, (err, todolist) => {
-        if (err) {
-          return res.status(404).send({ error: 'Todolist not found' });
-        }
-        return res.status(200).send(todolist);
-      });
-    } catch (err) {
-      res.status(400).send({ error: 'Unexpected error while getting todolist' });
-    }
-  });
+//       todolistController.getTodoListById(userId, todolistId, (err, todolist) => {
+//         if (err) {
+//           return res.status(404).send({ error: 'Todolist not found' });
+//         }
+//         return res.status(200).send(todolist);
+//       });
+//     } catch (err) {
+//       res.status(400).send({ error: 'Unexpected error while getting todolist' });
+//     }
+//   });
   
 
-router.post('/:userId/todoId',verifyUser,(req,res)=>{
-    try{
-        const {todolist_name,description} = req.body
-        const userId = parseInt(req.params.userId)
-        if(!(todolist_name)){
-            return res.status(400).send('Required inputs are missing')
-        }
+// router.post('/:userId/todoId',verifyUser,(req,res)=>{
+//     try{
+//         const {todolist_name,description} = req.body
+//         const userId = parseInt(req.params.userId)
+//         if(!(todolist_name)){
+//             return res.status(400).send('Required inputs are missing')
+//         }
         
-        const todoDetails = {
-            description: description || "",
-            todolist_name,
-            userId
-        }
-        todolistController.createTodoList(todoDetails,(err,result) =>{
-            if (err){
-                    return res.status(400).send({error: 'Error creating todolist'})
-            }else{
-                    return res.status(201).send(result)
-            }
-        })
-    }catch(err){
-            res.status(400).send({error:'Unexpected error while creating todo'})
-    }
-})
+//         const todoDetails = {
+//             description: description || "",
+//             todolist_name,
+//             userId
+//         }
+//         todolistController.createTodoList(todoDetails,(err,result) =>{
+//             if (err){
+//                     return res.status(400).send({error: 'Error creating todolist'})
+//             }else{
+//                     return res.status(201).send(result)
+//             }
+//         })
+//     }catch(err){
+//             res.status(400).send({error:'Unexpected error while creating todo'})
+//     }
+// })
 
-router.post('/:userId/todolists/delete', verifyUser, (req, res) => {
-    const userId = parseInt(req.params.userId);
-    const { todolistIds } = req.body;
+// router.post('/:userId/todolists/delete', verifyUser, (req, res) => {
+//     const userId = parseInt(req.params.userId);
+//     const { todolistIds } = req.body;
   
-    if (!todolistIds || !Array.isArray(todolistIds)) {
-      return res.status(400).send('Invalid todolist ids');
-    }
+//     if (!todolistIds || !Array.isArray(todolistIds)) {
+//       return res.status(400).send('Invalid todolist ids');
+//     }
   
-    todolistController.deleteTodoLists(userId, todolistIds, (err, result) => {
-      if (err) {
-        return res.status(400).send({ error: 'Error deleting todolists' });
-      } else {
-        return res.status(200).send(result);
-      }
-    });
-  });
+//     todolistController.deleteTodoLists(userId, todolistIds, (err, result) => {
+//       if (err) {
+//         return res.status(400).send({ error: 'Error deleting todolists' });
+//       } else {
+//         return res.status(200).send(result);
+//       }
+//     });
+//   });
 
-router.put('/:userId/todo/:todolistId', verifyUser, (req, res) => {
+router.put('/:userId/todo/:todolistId/task/:taskId', verifyUser, (req, res) => {
     try {
-      const { todolist_name} = req.body;
-      const userId = parseInt(req.params.userId);
-      const todolistId = parseInt(req.params.todolistId);
-  
-      if (!todolist_name) {
-        return res.status(400).send('Required inputs are missing');
+      const data = req.body;
+      const taskId = parseInt(req.params.taskId);
+      if(!data.description && !("checked" in data)){
+        return res.status(400).send("You need to have at least a description or checked property")
       }
-  
-      const todoDetails = {
-        todolist_name,
-        userId,
-        todolistId
-      };
-      todolistController.updateTodoList(todoDetails, (err, result) => {
+      
+      taskController.updateTask(data,taskId,(err, result) => {
         if (err) {
-          return res.status(400).send({ error: 'Error updating todolist' });
+          return res.status(400).send({ error: 'Error updating task' });
         } else {
           return res.status(200).send(result);
         }
       });
     } catch (err) {
-      res.status(400).send({ error: 'Unexpected error while updating todo' });
+      res.status(400).send({ error: 'Unexpected error while updating task' });
     }
   });
 
-  router.delete('/:userId/todo/:todolistId', verifyUser, (req, res) => {
-    try {
-      const userId = parseInt(req.params.userId);
-      const todolistId = parseInt(req.params.todolistId);
-      todolistController.deleteTodoList(userId, todolistId, (err, result) => {
-        if (err) {
-          return res.status(400).send({ error: 'Error deleting todolist' });
-        } else {
-          return res.status(200).send({ message: 'Todolist deleted successfully' });
-        }
-      });
-    } catch (err) {
-      res.status(400).send({ error: 'Unexpected error while deleting todolist' });
-    }
-  });
+  // router.delete('/:userId/todo/:todolistId', verifyUser, (req, res) => {
+  //   try {
+  //     const userId = parseInt(req.params.userId);
+  //     const todolistId = parseInt(req.params.todolistId);
+  //     todolistController.deleteTodoList(userId, todolistId, (err, result) => {
+  //       if (err) {
+  //         return res.status(400).send({ error: 'Error deleting todolist' });
+  //       } else {
+  //         return res.status(200).send({ message: 'Todolist deleted successfully' });
+  //       }
+  //     });
+  //   } catch (err) {
+  //     res.status(400).send({ error: 'Unexpected error while deleting todolist' });
+  //   }
+  // });
 // router.post("/login",(req,res)=>{
 //     try{
 //         //retrive email and password from req.body

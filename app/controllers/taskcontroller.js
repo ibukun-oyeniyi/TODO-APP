@@ -6,16 +6,16 @@ const createTask =  (taskDetails,done)=>{
     taskService.createTask(taskDetails,done)
 }
 
-// const updateTodoList = (todoListData,done)=>{
-//     taskService.updateTask(todoListData,done)
-// }
+const updateTask = (taskData,taskId,done)=>{
+    taskService.updateTask(taskData,taskId,done)
+}
 
 // const getTasks = (userId,limit,done)=>{
 //     taskService.getTasks(userId,limit,done)
 // }
 
-const getTaskById = (todolistId,taskId,done)=>{
-    taskService.getTaskById(todolistId,taskId,done)
+const getTaskById = (taskId,done)=>{
+    taskService.getTaskById(taskId,done)
 }
 
 // const deleteTodoLists = (todoData,done)=>{
@@ -26,4 +26,4 @@ const getTaskById = (todolistId,taskId,done)=>{
 //     todoService.deleteTodoList(userId,todolistId,done)
 // }
 
-module.exports = { createTask,getTaskById}
+module.exports = { createTask,getTaskById,updateTask}

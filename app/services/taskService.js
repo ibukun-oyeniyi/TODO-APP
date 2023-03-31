@@ -10,8 +10,8 @@ const taskDao = require("../dao/task.Dao")
 //     taskDao.gettasks(userId,limit,done)
 // }
 
-const getTaskById = (todoId,taskId,done)=>{
-    taskDao.getTaskById(todoId,taskId,done)
+const getTaskById = (taskId,done)=>{
+    taskDao.getTaskById(taskId,done)
 }
 
 // const deletetask = (userId,taskId,done)=>{
@@ -27,13 +27,13 @@ const createTask= (taskData,done)=>{
 //     taskDao.deleteManytask(taskDatas,done)
 // }
 
-// const updatetask = (taskData,done)=>{
-//     //call the taskdao findtask method
-//     taskDao.updatetask(taskData,done)
-// }
+const updateTask = (taskData,taskId,done)=>{
+    //call the taskdao findtask method
+    taskDao.updateTask(taskData,taskId,done)
+}
 
 
 
 module.exports={
-    createTask,getTaskById
+    createTask,getTaskById,updateTask
 }
