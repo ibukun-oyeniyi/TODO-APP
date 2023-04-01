@@ -21,7 +21,7 @@ module.exports = (sequelize, Sequelize) => {
 
     });
     Task.associate = function(models) {
-        Task.belongsTo(models.todo, { foreignKey: 'todolistId' });
+        Task.belongsTo(models.todo, { foreignKey: 'todolistId',onDelete: "cascade" });
         
     };
   

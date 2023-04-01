@@ -19,7 +19,7 @@ db.sequelize.authenticate()
         console.log(err);
     })
 
-db.sequelize.sync({ alter:true})
+db.sequelize.sync({ })
     .then(() => {
         console.log("Yes Resyncing to the database has been done");
     }).catch (err => {

@@ -46,10 +46,12 @@ db.user = User;
 db.todo = Todo;
 db.task = Task;
 db.tag = Tag;
-db.todolistTag = TodolistTag;
+db.todolistTag = TodolistTag
+
 
 User.associate(db);
 Todo.associate(db);
-Task.associate(db);
+
+
 
 module.exports = db

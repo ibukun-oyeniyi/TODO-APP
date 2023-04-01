@@ -16,7 +16,7 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
   User.associate = function(model) {
-    User.hasMany(model.todo, { foreignKey: 'userId' });
+    User.hasMany(model.todo, { foreignKey: 'userId',onDelete: "cascade" });
   };
   return User;
 };
