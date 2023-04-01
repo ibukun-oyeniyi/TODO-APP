@@ -22,6 +22,7 @@ module.exports = (sequelize, Sequelize) => {
     });
     Task.associate = function(models) {
         Task.belongsTo(models.todo, { foreignKey: 'todolistId' });
+        
     };
   
     return Task;

@@ -50,6 +50,6 @@ db.todolistTag = TodolistTag;
 
 User.associate(db);
 Todo.associate(db);
-Tag.associate(db)
+Task.associate(db);
 
 module.exports = db

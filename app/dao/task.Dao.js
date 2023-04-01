@@ -83,21 +83,20 @@ const updateTask = (taskData, taskId,done) => {
   //   });
   // };
    
-  // const deleteTodoLists = (userId, todolistIds, done) => {
-  //   db.todo.destroy({
-  //     where: {
-  //       id: todolistIds,
-  //       userId: userId,
-  //     },
-  //   })
-  //     .then((result) => {
-  //       done(undefined, result);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       done('Error deleting todolists');
-  //     });
-  // };
+  const deleteTask = (taskId, done) => {
+    db.task.destroy({
+      where: {
+        id: taskId,
+      },
+    })
+      .then((result) => {
+        done(undefined, result);
+      })
+      .catch((err) => {
+        console.log(err);
+        done('Error deleting todolists');
+      });
+  };
 module.exports = {
-    createTask,getTaskById,updateTask
+    createTask,getTaskById,updateTask,deleteTask
 }

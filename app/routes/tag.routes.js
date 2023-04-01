@@ -1,5 +1,5 @@
 const express = require('express')
-const taskController = require('../controllers/taskcontroller')
+const tagController = require('../controllers/tagcontroller')
 const {verifyUser} = require("../middleware/authMiddleware")
 const router = express.Router()
 
@@ -20,15 +20,13 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
     }
   })
 
-  router.post('/:userId/todo/:todoId/task', verifyUser, (req, res) => {
+  router.post('/:userId/tag', verifyUser, (req, res) => {
     try {
-      const todolistId = parseInt(req.params.todoId)
-      const {description} = req.body
-      const todoDetails ={
-        description,
-        todolistId
-      }
-      taskController.createTask(todoDetails,  (err, result) => {
+        if (!req.body.name){
+            return res.status(400).send("Error creating tag a tag must have a name")
+        
+        }
+      tagController.createTag(req.body,  (err, result) => {
         if (err) {
           return res.status(400).send({ error: 'Error creating tasks' })
         } else {
@@ -99,30 +97,10 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
 //     });
 //   });
 
-router.put('/:userId/todo/:todolistId/task/:taskId', verifyUser, (req, res) => {
+  router.delete('/:userId/tag/:tagId', verifyUser, (req, res) => {
     try {
-      const data = req.body;
-      const taskId = parseInt(req.params.taskId);
-      if(!data.description && !("checked" in data)){
-        return res.status(400).send("You need to have at least a description or checked property")
-      }
-      
-      taskController.updateTask(data,taskId,(err, result) => {
-        if (err) {
-          return res.status(400).send({ error: 'Error updating task' });
-        } else {
-          return res.status(200).send(result);
-        }
-      });
-    } catch (err) {
-      res.status(400).send({ error: 'Unexpected error while updating task' });
-    }
-  });
-
-  router.delete('/:userId/todo/:todolistId/task/:taskId', verifyUser, (req, res) => {
-    try {
-      const taskId = parseInt(req.params.taskId);
-      taskController.deleteTaskt(taskId, (err, result) => {
+      const tagId = parseInt(req.params.tagId);
+      tagController.deleteTag(tagId, (err, result) => {
         if (err) {
           return res.status(400).send({ error: 'Error deleting todolist' });
         } else {

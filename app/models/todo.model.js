@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
     };
 
     Todo.associate = function(model) {
-      Todo.hasMany(model.task, { foreignKey: 'todolistId' });
+      Todo.hasMany(model.task, { foreignKey: 'todolistId', onDelete: "cascade" });
     };
 
     Todo.associate = function(model) {
