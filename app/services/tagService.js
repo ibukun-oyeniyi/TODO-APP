@@ -1,4 +1,4 @@
-const tagDao = require("../dao/task.Dao")
+const tagDao = require("../dao/tagDao")
 
 // const findtask =  (id,done)=>{
 //     //call the taskdao findtask method
@@ -17,7 +17,6 @@ const tagDao = require("../dao/task.Dao")
 // }
 
 const createTag= (tagData,done)=>{
-    //call the taskdao findtask method
     tagDao.createTag(tagData,done)
 }
 

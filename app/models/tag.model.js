@@ -13,6 +13,7 @@ module.exports = (sequelize, Sequelize) => {
         });
         Tag.associate = function(models) {
             Tag.belongsToMany(models.todo, { through: models.todolistTag });
+            Tag.hasMany(models.todolistTag,{ foreignKey: 'tagId', onDelete: "cascade" });
         };
   
     return Tag;

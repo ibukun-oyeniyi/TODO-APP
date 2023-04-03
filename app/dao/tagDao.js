@@ -2,8 +2,9 @@ const db = require("../config/dbConfig")
 const hashedPassword = require("../utils/hashpassword")
 
 const createTag = (tagData,done) =>{
+  console.log(tagData)
   const newTag = new db.tag(tagData)
-  newTask.save().then((res)=>{
+  newTag.save().then((res)=>{
       done(undefined,res)
   }).catch(err=>{
       done("Error saving tag")
