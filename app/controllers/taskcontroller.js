@@ -26,4 +26,4 @@ const deleteTask = (taskId,done)=>{
 //     todoService.deleteTodoList(userId,todolistId,done)
 // }
 
-module.exports = { createTask,getTaskById,updateTask}
+module.exports = { createTask,getTaskById,updateTask,deleteTask}
