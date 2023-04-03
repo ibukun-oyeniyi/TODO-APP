@@ -17,7 +17,14 @@ const findTodoList =  (id,done)=>{
 const getTodoLists = (userId, limit, done) => {
     db.todo.findAll({
       where: { userId: userId },
-      include: {model: db.task},
+      include: [
+        {model: db.task},
+        {model: db.todolistTag,
+          include: [{ model: db.tag }]
+        }],
+      through: {
+        attributes: [] // Exclude the join table attributes from the result
+      },
       limit: limit
     }).then(todoLists => {
       done(undefined, todoLists);
@@ -28,7 +35,6 @@ const getTodoLists = (userId, limit, done) => {
   };
 
 const createTodoList = (todoListData,done) =>{
-    
     const newTodoList = new db.todo(todoListData)
     newTodoList.save().then((res)=>{
         done(undefined,res)
@@ -61,7 +67,16 @@ const updateTodoList = (todoListData, done) => {
   const getTodoListById = (userId, todolistId, done) => {
     db.todo.findOne({
       where: { id: todolistId, userId: userId },
-      include: {model: db.task}
+      include: [
+        {model: db.task},
+        { model: db.tag, 
+          attributes: { exclude: [db.todolistTag,'id','createdAt','updatedAt'] },
+          // include: [{ model: db.tag, attributes: ['name'] }]
+
+        }],
+      through: {
+        attributes:  { exclude: ['todolistTag'] }, // Exclude the join table attributes from the result
+      },
     }).then(todolist => {
       if (!todolist) {
         done('Todolist not found or unauthorized');

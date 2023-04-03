@@ -20,6 +20,7 @@ module.exports = (sequelize, Sequelize) => {
   Todo.associate = function(model) {
       Todo.belongsTo(model.user, { foreignKey: 'userId' });
       Todo.hasMany(model.task, { foreignKey: 'todolistId', onDelete: "cascade" });
+      Todo.hasMany(model.todolistTag,{ foreignKey: 'todoId', onDelete: "cascade" });
       Todo.belongsToMany(model.tag, { through: model.todolistTag });
     };
   return Todo;

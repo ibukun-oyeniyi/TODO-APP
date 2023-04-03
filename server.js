@@ -5,6 +5,7 @@ const authRoutes = require("./app/routes/auth.routes")
 const todoRoutes = require("./app/routes/todo.routes")
 const taskRoutes = require("./app/routes/task.routes")
 const tagRoutes = require("./app/routes/tag.routes")
+const todoTagRoutes = require("./app/routes/todoTag.routes")
 const {verifyUser} = require("./app/middleware/authMiddleware")
 
 const app = express();
@@ -19,7 +20,7 @@ db.sequelize.authenticate()
         console.log(err);
     })
 
-db.sequelize.sync({ })
+db.sequelize.sync({})
     .then(() => {
         console.log("Yes Resyncing to the database has been done");
     }).catch (err => {
@@ -38,6 +39,7 @@ app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1", todoRoutes)
 app.use("/api/v1", taskRoutes)
 app.use("/api/v1", tagRoutes)
+app.use("/api/v1", todoTagRoutes)
 
 app.use((err, req, res, next) => {
   const errorStatus = err.status || 500

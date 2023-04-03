@@ -6,7 +6,10 @@ module.exports = (sequelize, Sequelize) => {
           autoIncrement: true
         },
         });
-    
+      TodolistTag.associate = function(model) {
+        TodolistTag.belongsTo(model.todo, { foreignKey: 'todoId' });
+        TodolistTag.belongsTo(model.tag, { foreignKey: 'tagId' });  
+      };
   
     return TodolistTag;
   };
