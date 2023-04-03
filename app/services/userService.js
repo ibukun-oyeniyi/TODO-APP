@@ -11,7 +11,13 @@ const registerUser= (userData,done)=>{
     userDao.registerUser(userData,done)
 }
 
+const getAllTasks= (userId,done)=>{
+    //call the userdao finduser method
+    console.log("i reached here")
+    userDao.getAllTasks(userId,done)
+}
+
 
 module.exports={
-    findUser,registerUser
+    findUser,registerUser,getAllTasks
 }

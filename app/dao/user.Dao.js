@@ -35,6 +35,31 @@ const registerUser = (userData,done) =>{
 }
    
 
+const getAllTasks = (userId, done) => {
+    db.user
+      .findByPk(userId, {
+        include: [
+          {
+            model: db.todo,
+            include: [{ model: db.task }],
+          },
+        ],
+      })
+      .then((result, err) => {
+        if (err) {
+          console.log(err);
+          return done(err);
+        }
+        const final = result.todos.flatMap((todo) => todo.tasks);
+        done(undefined, final);
+      })
+      .catch((err) => {
+        console.log(err);
+        done(err);
+      });
+  };
+  
+
 module.exports = {
-    findUser,registerUser
+    findUser,registerUser,getAllTasks
 }
