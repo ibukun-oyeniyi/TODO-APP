@@ -50,8 +50,8 @@ const getAllTasks = (userId, done) => {
           console.log(err);
           return done(err);
         }
-        const final = result.todos.flatMap((todo) => todo.tasks);
-        done(undefined, final);
+        
+        done(undefined, result);
       })
       .catch((err) => {
         console.log(err);

@@ -7,6 +7,11 @@ const getAllTasks =  (userId, done) => {
       
 }
 
+const searchTasks =  (userId,queryStr, done) => {
+    userService.searchTasks(userId,queryStr,done);
+      
+}
+
 // const getTasks = (userId,limit,done)=>{
 //     taskService.getTasks(userId,limit,done)
 // }
@@ -23,4 +28,4 @@ const deleteTask = (taskId,done)=>{
 //     todoService.deleteTodoList(userId,todolistId,done)
 // }
 
-module.exports = { getAllTasks}
+module.exports = { getAllTasks,searchTasks}

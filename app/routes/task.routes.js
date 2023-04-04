@@ -36,6 +36,23 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
     }
   })
 
+  router.get('/:userId/tasks/search', verifyUser, (req, res) => {
+    
+    try {
+      const queryStr = req.query.search
+      const userId = parseInt(req.params.userId)
+      userController.searchTasks(userId,queryStr, (err, result) => {
+        if (err) {
+          return res.status(400).send({ error: 'Error getting tasks' })
+        } else {
+          return res.status(200).send(result)
+        }
+      })
+    } catch (err) {
+      res.status(400).send({ error: 'Unexpected error while getting tasks' })
+    }
+  })
+
   router.post('/:userId/todo/:todoId/task', verifyUser, (req, res) => {
     try {
       const todolistId = parseInt(req.params.todoId)
