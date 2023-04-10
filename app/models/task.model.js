@@ -23,8 +23,11 @@ module.exports = (sequelize, Sequelize) => {
         position:{
             type: Sequelize.INTEGER,
             allowNull: false,
-            autoIncrement: true,
             defaultValue: 1,
+        },
+        file: {
+            type: Sequelize.STRING,
+            allowNull: true
         }
 
     });

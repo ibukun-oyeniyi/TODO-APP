@@ -3,6 +3,9 @@ const taskController = require('../controllers/taskcontroller')
 const userController = require('../controllers/usercontroller')
 const {verifyUser} = require("../middleware/authMiddleware")
 const router = express.Router()
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const bodyParser = require('body-parser');
 
 //REGISTER A USER
 
@@ -53,11 +56,15 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
     }
   })
 
-  router.post('/:userId/todo/:todoId/task', verifyUser, (req, res) => {
+  router.post('/:userId/todo/:todoId/task',upload.single('file'), bodyParser.urlencoded({ extended: true }),verifyUser, (req, res) => {
     try {
       const todolistId = parseInt(req.params.todoId)
       const {description} = req.body
+
       req.body.todolistId = todolistId
+      if(req.file){
+        req.body.file = req.file.filename
+      }
       taskController.createTask(req.body,  (err, result) => {
         if (err) {
           return res.status(400).send({ error: 'Error creating tasks' })
@@ -67,6 +74,23 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
       })
     } catch (err) {
       res.status(400).send({ error: 'Unexpected error while creating tasks' })
+    }
+  })
+
+  router.post('/:userId/reorder/:todoId/task/:taskId', verifyUser, async (req, res) => {
+    try {
+      const todoId = parseInt(req.params.todoId)
+      const taskId = parseInt(req.params.taskId)
+      const {position} = req.body
+      await taskController.reorderTask(todoId,taskId,position,(err, result) => {
+        if (err) {
+          return res.status(400).send({ error: 'Error reordering tasks' })
+        } else {
+          return res.status(200).send(result)
+        }
+      })
+    } catch (err) {
+      res.status(400).send({ error: 'Unexpected error while reordering tasks' })
     }
   })
 
@@ -129,12 +153,15 @@ router.get('/:userId/todo/:todoId/task/:taskId', verifyUser, (req, res) => {
 //     });
 //   });
 
-router.put('/:userId/todo/:todolistId/task/:taskId', verifyUser, (req, res) => {
+router.put('/:userId/todo/:todolistId/task/:taskId',upload.single('file'),bodyParser.urlencoded({ extended: true }), verifyUser, (req, res) => {
     try {
       const data = req.body;
+      if (req.file){
+        data.file = req.file.filename
+      }
       const taskId = parseInt(req.params.taskId);
-      if(!data.description && !("checked" in data) && !data.priority){
-        return res.status(400).send("You need to have at least a description or checked property or priority")
+      if(!data.description && !("checked" in data) && !data.priority && !data.deadline && !data.file){
+        return res.status(400).send("You need to have at least a description or checked property or priority or deadline or file to upload")
       }
       
       taskController.updateTask(data,taskId,(err, result) => {
