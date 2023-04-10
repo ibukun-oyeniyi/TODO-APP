@@ -22,8 +22,13 @@ const deleteTask = (taskId,done)=>{
     taskService.deleteTask(taskId,done)
 }
 
+const reorderTask = async (todoId,taskId,position,done)=>{
+    //call the taskdao findtask method
+    await taskService.reorderTask(todoId,taskId,position,done)
+}
+
 // const deleteTodoList = (userId,todolistId,done)=>{
 //     todoService.deleteTodoList(userId,todolistId,done)
 // }
 
-module.exports = { createTask,getTaskById,updateTask,deleteTask}
+module.exports = { createTask,getTaskById,updateTask,deleteTask,reorderTask}

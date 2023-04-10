@@ -14,14 +14,24 @@ const findTodoList =  (id,done)=>{
     })
 }
 
-const getTodoLists = (userId, limit, done) => {
+const getTodoLists = async (userId, limit, done) => {
     db.todo.findAll({
       where: { userId: userId },
+      order:[
+        [{ model: db.task }, 'position', 'DESC'], 
+        ['updatedAt','DESC']
+      ],
       include: [
-        {model: db.task},
-        {model: db.todolistTag,
-          include: [{ model: db.tag }]
+        {
+          model: db.task,
+        },
+
+        {
+          model: db.todolistTag,
+          include: [{ model: db.tag}],
+          
         }],
+      
       through: {
         attributes: [] // Exclude the join table attributes from the result
       },
@@ -32,7 +42,33 @@ const getTodoLists = (userId, limit, done) => {
       console.log(err);
       done('Error fetching todolists');
     });
-  };
+  //   try {
+  //     const result = await db.sequelize.query(`
+  //       SELECT todos.*
+  //       INNER JOIN todos ON tasks.todolistId 
+  //       INNER JOIN todolisttags ON tt.taskId = t.id
+  //       INNER JOIN tags tag ON tt.tagId = tag.id
+  //       WHERE tl.userId = :userId
+  //       ORDER BY tl.position ASC, tt.position ASC
+  //       LIMIT :limit
+  //     `, {
+  //       replacements: {
+  //         userId: userId,
+  //         limit: limit
+  //       },
+  //       type: QueryTypes.SELECT
+  //     });
+  
+  //     // Process the result and transform it into the desired format
+  //     // ...
+  
+  //     done(null, result);
+  //   } catch (error) {
+  //     console.log(error)
+  //     done(error);
+  //   }
+  // };
+}
 
 const createTodoList = (todoListData,done) =>{
     const newTodoList = new db.todo(todoListData)
@@ -67,6 +103,9 @@ const updateTodoList = (todoListData, done) => {
   const getTodoListById = (userId, todolistId, done) => {
     db.todo.findOne({
       where: { id: todolistId, userId: userId },
+      order:[
+        [{ model: db.task }, 'position', 'DESC'], 
+      ],
       include: [
         {model: db.task},
         { model: db.tag, 

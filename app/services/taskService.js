@@ -18,8 +18,13 @@ const updateTask = (taskData,taskId,done)=>{
     taskDao.updateTask(taskData,taskId,done)
 }
 
+const reorderTask = async (todoId, taskId,position,done)=>{
+    //call the taskdao findtask method
+    await taskDao.reorderTask(todoId, taskId,position,done)
+}
+
 
 
 module.exports={
-    createTask,getTaskById,updateTask,deleteTask
+    createTask,getTaskById,updateTask,deleteTask,reorderTask
 }
